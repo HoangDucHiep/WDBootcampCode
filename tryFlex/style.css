@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+
+}
+
+.container {
+    max-width: 800px;
+    max-height: 500px;
+    border: 1px solid rgb(188, 0, 0);
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.flex-item {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(188, 0, 0);
+    margin: 10px;
+}
+
+.first {
+    order: 0;
+}
