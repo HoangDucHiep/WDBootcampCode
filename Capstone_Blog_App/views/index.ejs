@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provjp blog app</title>
+</head>
+<body>
+    <a href="/add">Add a new post</a>
+
+    <h2>All post</h2>
+    <% if (posts.length > 0) { %>
+        <ul>
+            <% posts.forEach(post => { %>
+                <li>
+                    <a href="/post/<%= post.id %>"><h3><%= post.title %></h3></a>
+                    <hr>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No post available</p>
+    <% } %>
+</body>
+</html>
