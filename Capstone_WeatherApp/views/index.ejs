@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles/main.css" />
+        <title>Weather App</title>
+    </head>
+    <body>
+        <div class="screen">
+            <div class="outer-container col-flex-box <%-isDaytime ? 'day-theme' : 'night-theme'%>">
+                <% if (locals.weatherData) { %>
+                <section class="location-and-search row-flex-box ">
+                    <div class="location">
+                        <i class="fa-solid fa-location-dot"></i> <%= weatherData.location.name %>
+                    </div>
+                    <div class="date">
+                        <%
+                        var dateStr = weatherData.location.localtime;
+                        var dateObj = new Date(dateStr);
+                        var options = { weekday: 'short', month: 'long', day: 'numeric' };
+                        var formattedDate = dateObj.toLocaleDateString('en-US', options);
+                        %>
+                        <%= formattedDate %>
+                    </div>
+                    <div class="search">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <form action="/search" method="post" class="search-input row-flex-box">
+                            <input
+                                type="text"
+                                class="search-box"
+                                name="search"
+                                placeholder="Search for places..."
+                            />
+                            <button id="submit-btn" type="submit">
+                                <i class="fa-solid fa-magnifying-glass submit-icon"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </section>
+                <section class="today-weather col-flex-box">
+                    <img
+                        class="weather-img"
+                        src= <%- `images/${(weatherData.current.condition.text).toLowerCase().replaceAll(" ", "-")}${isDaytime ? '-day' : '-night'}.png` %>
+                        alt="weather-img"
+                    />
+                    <section class="weather-condition">
+                        <div class="weather-data"><%= weatherData.current.condition.text %></div>
+                    </section>
+                    <div class="weather-information row-flex-box">
+                        
+
+                        <section class="temp-and-condition">
+                            <div class="weather-title">Temp</div>
+                            <div class="temp"><%= weatherData.current.temp_c %><sup>o</sup></div>
+                        </section>
+
+                        <section class="wind">
+                            <div class="weather-title">Wind:</div>
+                            <div class="weather-data"><%= weatherData.current.wind_kph %> km/h</div>
+                        </section>
+
+                        <section class="humidity">
+                            <div class="weather-title">Humidity</div>
+                            <div class="weather-data"><%= weatherData.current.humidity %>%</div>
+                        </section>
+                    </div>
+                </section>
+                <section class="weekly-forecast">
+                    <% 
+                    const weekDay = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    let forecastArr = weatherData.forecast.forecastday;
+                    for(let index = 0; index < forecastArr.length; index++) { 
+                        let dayLabel = index == 0 ? 'Today' : index == 1 ? 'Tomorrow' : weekDay[new Date(forecastArr[index].date).getDay()];
+                        let icon = forecastArr[index].day.condition.text.trim().toLowerCase().replaceAll(" ", "-");
+                        let temperature = forecastArr[index].day.avgtemp_c;
+                    %>
+                        <div class="today week-day row-flex-box">
+                            <div class="icon">
+                                <img src="images/<%= icon %>-day.png" alt="weather image" />
+                            </div>
+                            <div class="day"> <%= dayLabel %> </div>
+                            <div class="temp-w"><%= temperature %><sup>o</sup>C</div>
+                        </div>
+                    <% } %>
+                </section>
+                <% } %>
+            </div>
+        </div>
+
+        <script
+            src="https://kit.fontawesome.com/284bb24dc6.js"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+
+    <script src="scripts/script.js"></script>
+</html>
