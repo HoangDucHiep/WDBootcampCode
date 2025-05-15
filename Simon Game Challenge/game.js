@@ -76,4 +76,3 @@ function startOver() {
     gamePattern = [];
     started = false;
 }
-+
